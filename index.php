@@ -109,7 +109,7 @@ include_once "index-action.php";
                     <li class="page-item <?= $p <= 1 ? 'd-none' : '' ?>">
                         <a 
                             href="?p=<?= $p-1 . $params_suffix ?>"
-                            class="page-link" 
+                            class="page-link <?= $p <= 2 ? 'rounded-start' : '' ?>"
                             aria-label="Previous"
                         >
                             <span aria-hidden="true">
@@ -120,14 +120,19 @@ include_once "index-action.php";
 
                     <!-- Página atual -->
                     <li class="page-item active">
-                        <span class="page-link" aria-hidden="true"><?= $p ?></span>
+                        <span 
+                            class="page-link <?= $p <= 1 ? 'rounded-start' : '' ?> <?= $p == $qt_paginas ? 'rounded-end' : '' ?>"
+                            aria-hidden="true"
+                        >
+                            <?= $p ?>
+                        </span>
                     </li>
 
                     <!-- Página seguinte -->
                     <li class="page-item <?= $p >= $qt_paginas ? 'd-none' : '' ?>">
                         <a 
                             href="?p=<?= $p+1 . $params_suffix ?>"
-                            class="page-link"
+                            class="page-link <?= $p == $qt_paginas-1 ? 'rounded-end' : '' ?>"
                             aria-label="Next"
                         >
                             <span aria-hidden="true">
@@ -155,10 +160,11 @@ include_once "index-action.php";
         </div>
     </div>
 
-    <!--  -->
+    <!-- Tabela -->
     <div class="row">
         <div class="table-responsive">
             <table class="table table-hover">
+                <!-- Colunas -->
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -167,6 +173,7 @@ include_once "index-action.php";
                         <th colspan="2" class="text-center">Ações</th>
                     </tr>
                 </thead>
+                <!-- Linhas -->
                 <tbody>
                     <?php foreach ($caixas as $item): ?>
                         <tr>
@@ -177,7 +184,7 @@ include_once "index-action.php";
                                 <?= $item['nome'] ?>
                             </td>
                             <td>R$
-                                <?= $item['saldo_inicial'] ?>
+                                <?= number_format($item['saldo_inicial'], 2, ',', '.') ?>
                             </td>
                             <td class="text-center">
                                 <a title="Detalhes do Caixa" href="">
@@ -207,12 +214,12 @@ include_once "index-action.php";
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="nome" class="form-label">Nome do Caixa</label>
-                            <input type="text" name="nome" id="nome" class="form-control" required>
+                            <input type="text" name="nome" id="nome" class="form-control">
                             <div class="invalid-feedback">O campo é obrigatório.</div>
                         </div>
                         <div class="form-group mt-3">
-                            <label for="saldo-inicial" class="form-label">Saldo Inicial</label>
-                            <input type="text" name="saldo-inicial" id="saldo-inicial" class="form-control mask-value">
+                            <label for="saldo_inicial" class="form-label">Saldo Inicial</label>
+                            <input type="text" name="saldo_inicial" id="saldo_inicial" class="form-control mask-value">
                         </div>
                     </div>
                     <div class="modal-footer">
