@@ -8,27 +8,33 @@ include_once "index-action.php";
         <h3><i class="fa-solid fa-cash-register"></i>Controle de Caixas</h3>
     </div>
 
-    <!-- Criar Novo Caixa -->
     <div class="row mt-3">
+        <!-- Botão Criar Novo Caixa -->
         <div class="col">
             <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#add-new-caixa">
                 <i class="fa-solid fa-plus"></i> Criar Novo Caixa
             </button>
         </div>
+
+        <!-- Seção Filtrar por Nome -->
         <div class="col">
             <form method="get" id="form-search">
                 <div class="input-group">
+                    <!-- Botão executar busca -->
                     <span class="input-group-text" title="Limpar Busca" id="btn-clean">
                         <i class="fa-solid fa-rotate-left"></i>
                     </span>
+                    <!-- Botão limpar busca -->
                     <span class="input-group-text" title="Buscar" id="btn-search">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </span>
-                    <input type="search" name="buscar" id="input-search" class="form-control" placeholder="Busca..."
+                    <input type="search" name="busca" id="input-search" class="form-control" placeholder="Busca..."
                         value="<?= $busca ?? ''; ?>">
                 </div>
             </form>
         </div>
+
+        <!-- Seção Mostrar Resultados por Página -->
         <div class="col">
             <form method="get" class="d-flex w-full justify-content-center" id="form-select-rpp">
                 <input type="hidden" name="p" value="<?= '1'; ?>">
@@ -37,10 +43,10 @@ include_once "index-action.php";
                     <span class="input-group-text">Mostrar</span>
 
                     <select name="rpp" id="rpp" class="border btn btn-ouline-secondary">
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="40">40</option>
-                        <option value="todos">Todos</option>
+                        <option <?= $rpp == '10' ? 'selected' : '' ?> value="10">10</option>
+                        <option <?= $rpp == '20' ? 'selected' : '' ?> value="20">20</option>
+                        <option <?= $rpp == '40' ? 'selected' : '' ?> value="40">40</option>
+                        <option <?= $rpp == 'todos' ? 'selected' : '' ?> value="todos">Todos</option>
                     </select>
 
                     <span class="input-group-text">Resultados por Página</span>
@@ -52,8 +58,15 @@ include_once "index-action.php";
     <!--  -->
     <div class="row mt-3">
         <div class="busca-result d-flex justify-content-between">
-            <p>Mostrando 1 a 2 de 2</p>
-            <p>Página 1 de 1</p>
+            <p>Mostrando
+                <?= $offset + 1 ?> a
+                <?= ($offset + $limit) > $qt_registros ? $qt_registros : ($offset + $limit) ?> de
+                <?= $qt_registros ?>
+            </p>
+            <p>Página
+                <?= $p ?> de
+                <?= $qt_paginas ?>
+            </p>
         </div>
     </div>
 
@@ -70,31 +83,73 @@ include_once "index-action.php";
         <div class="col" style="height: 74px;">
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-end">
-                    <li class="page-item">
-                        <a title="Primeira Página" href="" class="page-link" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
+
+                    <!-- Sufixo dos parâmetros URl -->
+                    <?php
+                        $_busca = $busca ? "&busca=" . $busca : '';
+                        $_rpp = $rpp ? "&rpp=" . $rpp : '';
+                        $params_suffix = $_busca . $_rpp;
+                    ?>
+
+                    <!-- Primeira Página << -->
+                    <li class="page-item <?= $p <= 2 ? 'd-none' : '' ?>">
+                        <a 
+                            title="Primeira Página"
+                            href="?p=1<?= $params_suffix ?>"
+                            class="page-link"
+                            aria-label="First"
+                        >
+                            <span aria-hidden="true">
+                                &laquo;
+                            </span>
                         </a>
                     </li>
-                    <li class="page-item">
-                        <a title="Primeira Página" href="" class="page-link" aria-label="Previous">
-                            <span aria-hidden="true">1</span>
+
+                    <!-- Página anterior -->
+                    <li class="page-item <?= $p <= 1 ? 'd-none' : '' ?>">
+                        <a 
+                            href="?p=<?= $p-1 . $params_suffix ?>"
+                            class="page-link" 
+                            aria-label="Previous"
+                        >
+                            <span aria-hidden="true">
+                                <?= $p-1 ?>
+                            </span>
                         </a>
                     </li>
+
+                    <!-- Página atual -->
                     <li class="page-item active">
-                        <a title="Primeira Página" href="" class="page-link" aria-label="Previous">
-                            <span aria-hidden="true">2</span>
+                        <span class="page-link" aria-hidden="true"><?= $p ?></span>
+                    </li>
+
+                    <!-- Página seguinte -->
+                    <li class="page-item <?= $p >= $qt_paginas ? 'd-none' : '' ?>">
+                        <a 
+                            href="?p=<?= $p+1 . $params_suffix ?>"
+                            class="page-link"
+                            aria-label="Next"
+                        >
+                            <span aria-hidden="true">
+                                <?= $p+1 ?>
+                            </span>
                         </a>
                     </li>
-                    <li class="page-item">
-                        <a title="Primeira Página" href="" class="page-link" aria-label="Previous">
-                            <span aria-hidden="true">3</span>
+
+                    <!-- Última Página >> -->
+                    <li class="page-item <?= $p >= $qt_paginas-1 ? 'd-none' : '' ?>">
+                        <a 
+                            title="Última Página" 
+                            href="?p=<?= $qt_paginas . $params_suffix ?>"
+                            class="page-link" 
+                            aria-label="Last"
+                        >
+                            <span aria-hidden="true">
+                                &raquo;
+                            </span>
                         </a>
                     </li>
-                    <li class="page-item">
-                        <a title="Primeira Página" href="" class="page-link" aria-label="Previous">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
+
                 </ul>
             </nav>
         </div>
@@ -113,62 +168,28 @@ include_once "index-action.php";
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>#123</td>
-                        <td>Caixa</td>
-                        <td>R$ 1.234,56</td>
-                        <td class="text-center">
-                            <a title="Detalhes do Caixa" href="">
-                                <i class="fa-solid fa-circle-info action-icon icon-delete text-warning"></i>
-                            </a>
-                        </td>
-                        <td class="text-center">
-                            <i title="Excluir Caixa" class="fa-solid fa-trash-can action-icon icon-delete text-danger"
-                                data-bs-toggle="modal" data-bs-target="#delete-caixa" data-id=""></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>#123</td>
-                        <td>Caixa</td>
-                        <td>R$ 1.234,56</td>
-                        <td class="text-center">
-                            <a title="Detalhes do Caixa" href="">
-                                <i class="fa-solid fa-circle-info action-icon icon-delete text-warning"></i>
-                            </a>
-                        </td>
-                        <td class="text-center">
-                            <i title="Excluir Caixa" class="fa-solid fa-trash-can action-icon icon-delete text-danger"
-                                data-bs-toggle="modal" data-bs-target="#delete-caixa" data-id=""></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>#123</td>
-                        <td>Caixa</td>
-                        <td>R$ 1.234,56</td>
-                        <td class="text-center">
-                            <a title="Detalhes do Caixa" href="">
-                                <i class="fa-solid fa-circle-info action-icon icon-delete text-warning"></i>
-                            </a>
-                        </td>
-                        <td class="text-center">
-                            <i title="Excluir Caixa" class="fa-solid fa-trash-can action-icon icon-delete text-danger"
-                                data-bs-toggle="modal" data-bs-target="#delete-caixa" data-id=""></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>#123</td>
-                        <td>Caixa</td>
-                        <td>R$ 1.234,56</td>
-                        <td class="text-center">
-                            <a title="Detalhes do Caixa" href="">
-                                <i class="fa-solid fa-circle-info action-icon icon-delete text-warning"></i>
-                            </a>
-                        </td>
-                        <td class="text-center">
-                            <i title="Excluir Caixa" class="fa-solid fa-trash-can action-icon icon-delete text-danger"
-                                data-bs-toggle="modal" data-bs-target="#delete-caixa" data-id=""></i>
-                        </td>
-                    </tr>
+                    <?php foreach ($caixas as $item): ?>
+                        <tr>
+                            <td>#
+                                <?= $item['id'] ?>
+                            </td>
+                            <td>
+                                <?= $item['nome'] ?>
+                            </td>
+                            <td>R$
+                                <?= $item['saldo_inicial'] ?>
+                            </td>
+                            <td class="text-center">
+                                <a title="Detalhes do Caixa" href="">
+                                    <i class="fa-solid fa-circle-info action-icon icon-delete text-warning"></i>
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <i title="Excluir Caixa" class="fa-solid fa-trash-can action-icon icon-delete text-danger"
+                                    data-bs-toggle="modal" data-bs-target="#delete-caixa" data-id="<?= $item['id'] ?>"></i>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>

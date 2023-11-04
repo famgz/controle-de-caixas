@@ -13,3 +13,8 @@ i.action-icon {
         transform: scale(1.2);
     }
 }
+
+#btn-search,
+#btn-clean {
+    cursor: pointer;
+}

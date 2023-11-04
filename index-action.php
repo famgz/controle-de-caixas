@@ -7,7 +7,7 @@ $busca = filter_input(INPUT_GET, "busca", FILTER_SANITIZE_SPECIAL_CHARS);
 $query = "";
 
 if ($busca) {
-    $query = "WHERE nome LIKE: busca";
+    $query = "WHERE nome LIKE :busca";
 }
 
 $busca_todos = "SELECT id, nome, saldo_inicial FROM caixas $query";
@@ -15,7 +15,7 @@ $busca_todos = "SELECT id, nome, saldo_inicial FROM caixas $query";
 // Medida de segurança para evitar slq injection se receber diretamente $busca em $query
 $caixas = $db->prepare($busca_todos);
 if ($busca) {
-    $caixas->bindValue(":busca", $busca);
+    $caixas->bindValue(":busca", "%" . $busca . "%");
 }
 $caixas->execute();
 
@@ -44,16 +44,16 @@ if ($rpp != 'todos') {
 
     $caixas = $db->prepare("$busca_todos LIMIT $offset, $limit");
     if ($busca) {
-        $caixas->bindValue(":busca", $busca);
+        $caixas->bindValue(":busca", "%" . $busca . "%");
     }
     $caixas->execute();
 
     $todos = $db->prepare($busca_todos);
     if ($busca) {
-        $todos->bindValue(":busca", $busca);
+        $todos->bindValue(":busca", "%" . $busca . "%");
     }
     $todos->execute();
 }
 
 $qt_registros = $todos->rowCount();
-$qt_paginas = $qt_registros > 0 ? ceil($qt_registros / $limit) : 0;
+$qt_paginas = $qt_registros > 0 ? ceil($qt_registros / $limit) : 0; // evitar divisao por zero
