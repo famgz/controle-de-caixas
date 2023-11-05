@@ -17,7 +17,7 @@ if (btn_clean) {
     btn_clean.addEventListener('click', () => {
         document.querySelector('#input-search').value = '';
         document.querySelector('#form-search').submit();
-    })
+    });
 }
 
 // Botão Resultados por página
@@ -25,5 +25,15 @@ const rpp = document.querySelector('#rpp');
 if (rpp) {
     rpp.addEventListener('change', () => {
         document.querySelector('#form-select-rpp').submit();
-    })
+    });
 }
+
+// Atribuir ação de clique aos icones de exclusão
+const icons_delete = document.querySelectorAll('i.icon-delete.text-danger');
+icons_delete.forEach((item) => {
+    item.addEventListener('click', (e) => {
+        // atribuição do id selecionado ao modal de exclusão
+        let id = e.target.dataset.id;
+        document.querySelector('#input-delete-id').value = id;
+    });
+})

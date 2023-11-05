@@ -186,11 +186,13 @@ include_once "index-action.php";
                             <td>R$
                                 <?= number_format($item['saldo_inicial'], 2, ',', '.') ?>
                             </td>
+                            <!-- Botão detalhes do Caixa -->
                             <td class="text-center">
                                 <a title="Detalhes do Caixa" href="">
-                                    <i class="fa-solid fa-circle-info action-icon icon-delete text-warning"></i>
+                                    <i class="fa-solid fa-circle-info action-icon text-warning"></i>
                                 </a>
                             </td>
+                            <!-- Botão excluir Caixa -->
                             <td class="text-center">
                                 <i title="Excluir Caixa" class="fa-solid fa-trash-can action-icon icon-delete text-danger"
                                     data-bs-toggle="modal" data-bs-target="#delete-caixa" data-id="<?= $item['id'] ?>"></i>
@@ -235,9 +237,8 @@ include_once "index-action.php";
     <div class="modal fade" id="delete-caixa" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="delete-caixa-action.php" method="get">
-                    <input type="hidden" name="id" value="">
-
+                <form action="delete-caixa-action.php" method="post">
+                    <input type="hidden" name="id" value="" id="input-delete-id">
                     <div class="modal-header bg-danger text-light">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">
                             <i class="fa-solid fa-triangle-exclamation"></i> ATENÇÃO!
@@ -256,8 +257,6 @@ include_once "index-action.php";
             </div>
         </div>
     </div>
-
-
 </div>
 
 <!-- Validação de campos obrigatórios -->
