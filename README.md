@@ -10,3 +10,8 @@ Projeto para gerenciamento financeiro em PHP desenvolvido em paralelo com [@cwrs
 - JQuery
 - PHP
 - MySQL
+
+### Acesso:
+```
+http://localhost/controle-de-caixas/src/
+```
