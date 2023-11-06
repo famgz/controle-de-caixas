@@ -1,11 +1,9 @@
 <?php
 session_start();
 include_once("db.php");
+require_once("icons.php");
 
 $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
-
-$error_icon = "<i class='fa-solid fa-circle-exclamation'></i>";
-$success_icon = "<i class='fa-solid fa-circle-check'></i>";
 
 if($id) {
     $sql = $db->prepare("DELETE FROM caixas WHERE id = :id");

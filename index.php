@@ -1,9 +1,11 @@
 <?php
 include_once "header.php";
 include_once "index-action.php";
+include_once "icons.php";
 ?>
 
 <div class="container border round mt-3 p-3 shadow bg-light">
+
     <div class="row">
         <h3><i class="fa-solid fa-cash-register"></i>Controle de Caixas</h3>
     </div>
@@ -12,7 +14,7 @@ include_once "index-action.php";
         <!-- Botão Criar Novo Caixa -->
         <div class="col">
             <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#add-new-caixa">
-                <i class="fa-solid fa-plus"></i> Criar Novo Caixa
+                <?= $plus_icon ?> Criar Novo Caixa
             </button>
         </div>
 
@@ -22,11 +24,11 @@ include_once "index-action.php";
                 <div class="input-group">
                     <!-- Botão executar busca -->
                     <span class="input-group-text" title="Limpar Busca" id="btn-clean">
-                        <i class="fa-solid fa-rotate-left"></i>
+                        <?= $rotate_icon ?>
                     </span>
                     <!-- Botão limpar busca -->
                     <span class="input-group-text" title="Buscar" id="btn-search">
-                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <?= $glass_icon ?>
                     </span>
                     <input type="search" name="busca" id="input-search" class="form-control" placeholder="Busca..."
                         value="<?= $busca ?? ''; ?>">
@@ -188,14 +190,15 @@ include_once "index-action.php";
                             </td>
                             <!-- Botão detalhes do Caixa -->
                             <td class="text-center">
-                                <a title="Detalhes do Caixa" href="">
-                                    <i class="fa-solid fa-circle-info action-icon text-warning"></i>
+                                <a title="Detalhes do Caixa" href="show-caixa.php?id=<?= $item['id'] ?>">
+                                    <?= $warning_icon ?>
                                 </a>
                             </td>
                             <!-- Botão excluir Caixa -->
                             <td class="text-center">
-                                <i title="Excluir Caixa" class="fa-solid fa-trash-can action-icon icon-delete text-danger"
-                                    data-bs-toggle="modal" data-bs-target="#delete-caixa" data-id="<?= $item['id'] ?>"></i>
+                                <a title="Excluir Caixa" href="" data-bs-toggle="modal" data-bs-target="#delete-caixa" data-id="<?= $item['id'] ?>">
+                                    <?= $trash_icon ?>
+                                </a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -233,7 +236,7 @@ include_once "index-action.php";
         </div>
     </div>
 
-    <!-- Confirma exclusão do Caixa -->
+    <!-- Modal confirmar exclusão do Caixa -->
     <div class="modal fade" id="delete-caixa" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -241,7 +244,7 @@ include_once "index-action.php";
                     <input type="hidden" name="id" value="" id="input-delete-id">
                     <div class="modal-header bg-danger text-light">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">
-                            <i class="fa-solid fa-triangle-exclamation"></i> ATENÇÃO!
+                            <?= $warning_circle_icon ?> ATENÇÃO!
                         </h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>

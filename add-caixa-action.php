@@ -1,11 +1,9 @@
 <?php
 session_start();
 include_once("db.php");
+require_once("icons.php");
 
 $dados = filter_input_array(INPUT_POST, $_POST, FILTER_DEFAULT);
-
-$error_icon = "<i class='fa-solid fa-circle-exclamation'></i>";
-$success_icon = "<i class='fa-solid fa-circle-check'></i>";
 
 // checagem de valor do campo nome * já está sendo feita dentro do html
 if ($dados['nome'] == '') {
