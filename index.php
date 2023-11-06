@@ -1,7 +1,7 @@
 <?php
+include_once "library.php";
 include_once "header.php";
 include_once "index-action.php";
-include_once "icons.php";
 ?>
 
 <div class="container border round mt-3 p-3 shadow bg-light">
@@ -74,9 +74,11 @@ include_once "icons.php";
 
     <!--  -->
     <div class="row mt-3">
+        <!-- Campo reservado para receber mensagens de status de ações -->
         <div class="col">
+            <!-- Executar variável se existir -->
             <?php
-            if (!empty($_SESSION['msg'])) {
+            if (!empty($_SESSION['msg'])) { //sort of .get() function to avoid undefined key error
                 echo $_SESSION['msg'];
                 unset($_SESSION['msg']);
             }
@@ -191,7 +193,7 @@ include_once "icons.php";
                             <!-- Botão detalhes do Caixa -->
                             <td class="text-center">
                                 <a title="Detalhes do Caixa" href="show-caixa.php?id=<?= $item['id'] ?>">
-                                    <?= $warning_icon ?>
+                                    <?= $warning_c_icon ?>
                                 </a>
                             </td>
                             <!-- Botão excluir Caixa -->
@@ -244,7 +246,7 @@ include_once "icons.php";
                     <input type="hidden" name="id" value="" id="input-delete-id">
                     <div class="modal-header bg-danger text-light">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">
-                            <?= $warning_circle_icon ?> ATENÇÃO!
+                            <?= $warning_t_icon ?> ATENÇÃO!
                         </h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>

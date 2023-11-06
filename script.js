@@ -1,4 +1,4 @@
-// Formatar input numérico do campo Saldo Inicial em `Criar Novo Caixa`
+// Formatar inputs numéricos
 $(function () {
     $(".mask-value").mask("#.##0,00", { reverse: true });
 });
@@ -20,7 +20,7 @@ if (btn_clean) {
     });
 }
 
-// Botão Resultados por página
+// Botão resultados por página
 const rpp = document.querySelector('#rpp');
 if (rpp) {
     rpp.addEventListener('change', () => {
@@ -36,4 +36,9 @@ icons_delete.forEach((item) => {
         let id = e.target.dataset.id;
         document.querySelector('#input-delete-id').value = id;
     });
+})
+
+// Focar campo de input dentro do modal
+$('#add-new-caixa').on('shown.bs.modal', function () {
+    $('#nome').focus();
 })

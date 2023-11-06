@@ -1,7 +1,6 @@
 <?php
+include_once "library.php";
 session_start();
-include_once("db.php");
-require_once("icons.php");
 
 $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
 

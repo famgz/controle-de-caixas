@@ -1,7 +1,6 @@
 <?php
+include_once "library.php";
 session_start();
-include_once("db.php");
-require_once("icons.php");
 
 $dados = filter_input_array(INPUT_POST, $_POST, FILTER_DEFAULT);
 
@@ -18,8 +17,8 @@ if ($dados['nome'] == '') {
 }
 
 // tratamento numerico para o DB
-$dados['saldo_inicial'] = str_replace('.', '', $dados['saldo_inicial']);  // remover pontos
-$dados['saldo_inicial'] = str_replace(',', '.', $dados['saldo_inicial']);  // trocar virgulas por pontos
+$dados['saldo_inicial'] = saldo_str_to_float($dados['saldo_inicial']);
+
 
 $sql = $db->prepare('SELECT id FROM caixas WHERE nome = :nome');
 $sql->bindValue(':nome', $dados['nome']);

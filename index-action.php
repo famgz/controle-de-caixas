@@ -1,6 +1,6 @@
 <?php
+include_once "library.php";
 session_start();
-require_once("db.php");
 
 $rpp = filter_input(INPUT_GET, "rpp", FILTER_DEFAULT); // rpp -> resultados por pagina
 $busca = filter_input(INPUT_GET, "busca", FILTER_SANITIZE_SPECIAL_CHARS);
