@@ -38,6 +38,25 @@ icons_delete.forEach((item) => {
     });
 })
 
+// Aplicar ID do botão Excluir Caixa ao value do input modal input-delete-id antes de enviar para delete-caixa-action.php
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all elements with the data-bs-target attribute
+    let modalTriggers = document.querySelectorAll('[data-bs-target="#delete-caixa"]');
+
+    modalTriggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+            // Get the data-id attribute from the clicked button
+            let id = trigger.getAttribute('data-id');
+
+            // Set the value of the hidden input field in the modal
+            let modal = document.getElementById('input-delete-id');
+            if (modal) {
+                modal.value = id;
+            }
+        });
+    });
+});
+
 // Focar campo de input dentro do modal
 $('#add-new-caixa').on('shown.bs.modal', function () {
     $('#nome').focus();

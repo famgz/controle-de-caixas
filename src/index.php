@@ -198,7 +198,7 @@ include_once "index-action.php";
                             </td>
                             <!-- Botão excluir Caixa -->
                             <td class="text-center">
-                                <a title="Excluir Caixa" href="" data-bs-toggle="modal" data-bs-target="#delete-caixa" data-id="<?= $item['id'] ?>">
+                                <a title="Excluir Caixa" data-bs-toggle="modal" data-bs-target="#delete-caixa" data-id="<?= $item['id'] ?>">
                                     <?= $trash_icon ?>
                                 </a>
                             </td>
@@ -242,11 +242,12 @@ include_once "index-action.php";
     <div class="modal fade" id="delete-caixa" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="delete-caixa-action.php" method="post">
+                <form method="post" action="delete-caixa-action.php">
                     <input type="hidden" name="id" value="" id="input-delete-id">
                     <div class="modal-header bg-danger text-light">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">
-                            <?= $warning_t_icon ?> ATENÇÃO!
+                            <?= $warning_t_icon ?>
+                            ATENÇÃO!
                         </h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -255,13 +256,20 @@ include_once "index-action.php";
                         <p>Importante: Esta ação não pode ser desfeita.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-danger">Confirmar</button>
+                        <!-- Botão Cancelar -->
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+                        <!-- Botão Confirmar -->
+                        <button type="submit" class="btn btn-danger" name="action" value="deletar">
+                            Confirmar
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
 </div>
 
 <!-- Validação de campos obrigatórios -->
@@ -286,7 +294,6 @@ include_once "index-action.php";
         })
     })()
 </script>
-
 
 <?php
 include_once "footer.php";
