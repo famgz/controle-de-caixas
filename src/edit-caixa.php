@@ -4,7 +4,7 @@ session_start();
 
 $dados = filter_input_array(INPUT_POST);
 
-// Mensagem erro `nome` vazio
+// Mensagem de erro `nome` vazio
 if(!$dados['nome']) {
     $_SESSION['msg'] = "
         <p class='alert alert-danger'>
@@ -16,6 +16,7 @@ if(!$dados['nome']) {
     exit;
 }
 
+// Formatar saldo
 $dados['saldo_inicial'] = saldo_str_to_float($dados['saldo_inicial']);
 
 // Validar duplicidade de `nome`
@@ -65,6 +66,5 @@ $_SESSION['msg'] = "
 ";
 header('Location: index.php');
 exit;
-
 
 ?>
