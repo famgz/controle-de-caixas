@@ -33,6 +33,11 @@ if(!$sql->rowCount()) {
 
 $caixa = $sql->fetch(PDO::FETCH_ASSOC);  // PDO::FETCH_ASSOC -> avoid duplicated values
 
+$msg = '';
+if(!empty($_SESSION['msg'])) {
+    $msg = $_SESSION['msg'];
+    unset($_SESSION['msg']);
+}
 
 
 
