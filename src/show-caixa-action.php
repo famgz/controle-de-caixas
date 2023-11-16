@@ -2,6 +2,8 @@
 include_once "library.php";
 session_start();
 
+date_default_timezone_set("America/Recife");
+
 $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
 
 // Checar se id foi passado como parametro
@@ -38,7 +40,6 @@ if(!empty($_SESSION['msg'])) {
     $msg = $_SESSION['msg'];
     unset($_SESSION['msg']);
 }
-
 
 
 
