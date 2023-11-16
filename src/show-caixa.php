@@ -129,17 +129,17 @@ include_once "show-caixa-action.php";
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="discriminacao_movimento" class="form-label">Discriminação do Movimento</label>
-                            <input type="text" for="discriminacao_movimento" id="discriminacao_movimento" class="form-control" required>
+                            <input type="text" name="discriminacao_movimento" for="discriminacao_movimento" id="discriminacao_movimento" class="form-control" required>
                             <div class="invalid-feedback">O campo é obrigatório</div>
                         </div>
                         <div class="form-group">
                             <label for="data_movimento" class="form-label">Data do Lançamento</label>
-                            <input type="date" for="data_movimento" id="data_movimento" class="form-control" value="<?= date('Y-m-d') ?>" required>
+                            <input type="date" name="data_movimento" for="data_movimento" id="data_movimento" class="form-control" value="<?= date('Y-m-d') ?>" required>
                             <div class="invalid-feedback">O campo é obrigatório</div>
                         </div>
                         <div class="form-group">
                             <label for="valor_movimento" class="form-label">Valor do Lançamento</label>
-                            <input type="text" for="valor_movimento" id="valor_movimento" class="form-control mask-value" required>
+                            <input type="text" name="valor_movimento" for="valor_movimento" id="valor_movimento" class="form-control mask-value" required>
                             <div class="invalid-feedback">O campo é obrigatório</div>
                         </div>
                         <div class="form-group">
