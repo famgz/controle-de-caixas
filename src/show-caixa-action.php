@@ -42,6 +42,7 @@ if (!$sql->rowCount()) {
 
 $caixa = $sql->fetch(PDO::FETCH_ASSOC); // PDO::FETCH_ASSOC -> avoid duplicated values
 
+
 $msg = '';
 if (!empty($_SESSION['msg'])) {
     $msg = $_SESSION['msg'];
@@ -59,7 +60,8 @@ $sql = $db->prepare("
         valor_movimento,
         discriminacao_movimento
     FROM caixas_lancamentos 
-    WHERE id_caixa = :id;
+    WHERE id_caixa = :id
+    ORDER BY data_movimento ASC;
 ");
 $sql->bindValue(':id', $id);
 
@@ -80,13 +82,13 @@ $lancamentos = $sql->fetchAll();
 // debug($lancamentos);
 
 // atualizar saldo ate aquela data e lancamento
-$saldo = 0;
-foreach($lancamentos as $item) {
+$saldo = $caixa['saldo_inicial'];
+foreach($lancamentos as &$item) {  // `&` antes do $item garante modificar o proprio array ao inves de uma copia
     $entrada = $item['movimento'] == 'entrada' ? $item['valor_movimento'] : 0;
     $saida = $item['movimento'] == 'saida' ? $item['valor_movimento'] : 0;
 
-    $diff = $entrada - $saida;
-    $saldo += $diff;
+    $saldo += $entrada - $saida;
+    $item['saldo'] = $saldo;
 }
 
-var_dump($saldo);
+unset($item);

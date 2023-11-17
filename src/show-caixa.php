@@ -91,11 +91,11 @@ include_once "show-caixa-action.php";
 
                 <!-- Entradas (linhas) -->
                 <?php foreach ($lancamentos as $item) : ?>
-                    <!-- <?php debug($item) ?> -->
                     <?php  
                         $data = string_to_date($item['data_movimento']);
                         $entrada = $item['movimento'] == 'entrada' ? $item['valor_movimento'] : '-';
                         $saida = $item['movimento'] == 'saida' ? $item['valor_movimento'] : '-';
+                        $saldo = $item['saldo'];
                     ?>
                     <tr>
                         <td>
@@ -111,11 +111,11 @@ include_once "show-caixa-action.php";
                             <?= $saida != '-' ? saldo_float_to_str($saida) : '-' ?>
                         </td>
                         <td class="text-center">
-                            <?= "saldo a calcular" ?>
+                            <?= saldo_float_to_str($item['saldo']) ?>
                         </td>
                         <td><i class="fa-solid fa-pen-to-square"></i></td>
                     </tr>
-                
+
                 <?php endforeach; ?>
 
             </table>
