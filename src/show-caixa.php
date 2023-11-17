@@ -66,8 +66,7 @@ include_once "show-caixa-action.php";
     <div class="row mt-3">
         <div class="col">
             <h4><i class="fa-solid fa-pen-clip"></i> Lançamentos do Caixa</h4>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-add">Adicionar
-                lançamento</button>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-add">Adicionar lançamento</button>
             <div class="row mt-3">
                 <?= $msg; ?>
             </div>
@@ -80,38 +79,45 @@ include_once "show-caixa-action.php";
     <div class="row mt-3">
         <div class="table-responsive">
             <table class="table table-hover">
+                <!-- Titulos (colunas) -->
                 <tr>
                     <th>Data Movimento</th>
                     <th>Discriminação</th>
-                    <th>Entrada</th>
-                    <th>Saída</th>
-                    <th>Saldo</th>
+                    <th class="text-center">Entrada</th>
+                    <th class="text-center">Saída</th>
+                    <th class="text-center">Saldo</th>
                     <th></th>
                 </tr>
-                <tr>
-                    <td>00/00/0000</td>
-                    <td>Saldo anterior</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>0,00</td>
-                    <td><i class="fa-solid fa-pen-to-square"></i></td>
-                </tr>
-                <tr>
-                    <td>00/00/0000</td>
-                    <td>Lançamento referente recebimento</td>
-                    <td>100,00</td>
-                    <td>-</td>
-                    <td>100,00</td>
-                    <td><i class="fa-solid fa-pen-to-square"></i></td>
-                </tr>
-                <tr>
-                    <td>00/00/0000</td>
-                    <td>Lançamento referente pagamento</td>
-                    <td>-</td>
-                    <td>50,00</td>
-                    <td>50,00</td>
-                    <td><i class="fa-solid fa-pen-to-square"></i></td>
-                </tr>
+
+                <!-- Entradas (linhas) -->
+                <?php foreach ($lancamentos as $item) : ?>
+                    <!-- <?php debug($item) ?> -->
+                    <?php  
+                        $data = string_to_date($item['data_movimento']);
+                        $entrada = $item['movimento'] == 'entrada' ? $item['valor_movimento'] : '-';
+                        $saida = $item['movimento'] == 'saida' ? $item['valor_movimento'] : '-';
+                    ?>
+                    <tr>
+                        <td>
+                            <?= $data ?>
+                        </td>
+                        <td>
+                            <?= $item['discriminacao_movimento'] ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $entrada != '-' ? saldo_float_to_str($entrada) : '-' ?>
+                        </td>
+                        <td class="text-center">
+                            <?= $saida != '-' ? saldo_float_to_str($saida) : '-' ?>
+                        </td>
+                        <td class="text-center">
+                            <?= "saldo a calcular" ?>
+                        </td>
+                        <td><i class="fa-solid fa-pen-to-square"></i></td>
+                    </tr>
+                
+                <?php endforeach; ?>
+
             </table>
         </div>
     </div>

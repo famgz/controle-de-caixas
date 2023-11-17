@@ -18,7 +18,6 @@ foreach ($dados as $item) {
     }
 }
 
-
 // Erro, campo vazio encontrado
 if ($campo_vazio) {
     $_SESSION['msg'] = "
@@ -31,7 +30,6 @@ if ($campo_vazio) {
     exit;
 }
 
-
 // formatar numero
 $dados['valor_movimento'] = saldo_str_to_float($dados['valor_movimento']);
 
@@ -39,8 +37,8 @@ $dados['valor_movimento'] = saldo_str_to_float($dados['valor_movimento']);
 // exit;
 
 $sql = $db->prepare("
-    INSERT INTO caixas_lancamentos SET 
-        id_caixa = :id_caixa,
+    INSERT INTO caixas_lancamentos 
+    SET id_caixa = :id_caixa,
         discriminacao_movimento = :discriminacao_movimento,
         data_movimento = :data_movimento,
         valor_movimento = :valor_movimento,
