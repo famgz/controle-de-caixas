@@ -12,7 +12,9 @@ Projeto para gerenciamento financeiro em PHP desenvolvido em paralelo com @cwrsi
 - JQuery
 - AJAX
 
-### Acesso:
-```
-http://localhost/controle-de-caixas/src/
-```
+
+### Para rodar o projeto:
+- Baixar ou clonar o arquivo;
+- Salvar na pasta htdocs (pra quem está usando o Xampp), ou na pasta www (pra quem está usando o Wampp);
+- Rodar o servidor local Apache (Xampp ou Wampp por exemplo);
+- Abrir o diretório no navegador: http://localhost/pasta-do-projeto/src/
