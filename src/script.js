@@ -33,8 +33,8 @@ if (btn_filter_date) {
 const btn_filter_date_reset = document.querySelector('#btn-filter-date-reset');
 if (btn_filter_date_reset) {
     btn_filter_date_reset.addEventListener('click', () => {
-        document.querySelector('#data-ini').value = "";
-        document.querySelector('#data-fin').value = "";
+        document.querySelector('#data-ini').value = '';
+        document.querySelector('#data-fin').value = '';
         form_filter_date.submit();
     })
 }
@@ -80,3 +80,57 @@ document.addEventListener('DOMContentLoaded', function () {
 $('#add-new-caixa').on('shown.bs.modal', function () {
     $('#nome').focus();
 })
+
+// Converter float para monetario
+function float_to_currency(value) {
+    return parseFloat(value)
+    .toLocaleString(
+        'pt-BR',
+        {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }
+    );
+}
+
+
+// Obter dados do lancamento para preencher modal de edicao
+function modal_edit(id) {
+    if (!id) {
+        alert('ID invalido');
+        return false;
+    }
+
+    let ajax = new XMLHttpRequest();
+    ajax.open('GET', `ajax.php?id=${id}&action=edit_modal`);
+    ajax.setRequestHeader('Content-type', 'application/json');
+    ajax.send();
+
+    
+    ajax.onreadystatechange = () => {
+        let res = ''
+        if (ajax.readyState === 4) {
+            if (ajax.status === 200) {
+                res = JSON.parse(ajax.responseText);
+                if (res === 'erro') {
+                    alert('Erro. Algo saiu errado');
+                    return false;
+                }
+            }
+            else {
+                console.log(ajax.status);
+            }
+        }
+        if (!res) { return };
+
+        // console.log(res);
+
+        modal = document.querySelector('#modal-edit-lancamento');
+        modal.querySelector('#edit_id_caixa').value = res.id_caixa;
+        modal.querySelector('#edit_id_lancamento').value = res.id;
+        modal.querySelector('#edit_discriminacao_movimento').value = res.discriminacao_movimento;
+        modal.querySelector('#edit_data_movimento').value = res.data_movimento.split(' ')[0];
+        modal.querySelector('#edit_valor_movimento').value = float_to_currency(res.valor_movimento);
+        modal.querySelector('#edit_tipo_movimento').value = res.movimento;
+    }
+}

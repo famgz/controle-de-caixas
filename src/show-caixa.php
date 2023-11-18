@@ -3,12 +3,13 @@ include_once "header.php";
 include "show-caixa-action.php";
 ?>
 
+
 <div class="container border round mt-3 p-3 shadow bg-light">
     <div class="row">
         <div class="col">
             <div class="row">
                 <h3>
-                    <i class="fa-solid fa-circle-exclamation me-2"></i>
+                    <?= $error_icon ?>
                     Detalhes do Caixa
                 </h3>
             </div>
@@ -16,7 +17,7 @@ include "show-caixa-action.php";
         <div class="col d-flex justify-content-end align-items-center">
             <button class="btn btn-sm btn-light">
                 <a href="index.php">
-                    <i class="fa-solid fa-chevron-left"></i>
+                    <?= $chevron_left ?>
                 </a>
             </button>
             <small>Controle de Caixas</small>
@@ -68,7 +69,7 @@ include "show-caixa-action.php";
 
     <div class="row mt-3">
         <div class="col">
-            <h4><i class="fa-solid fa-pen-clip"></i> Lançamentos do Caixa</h4>
+            <h4><?= $pen_clip ?> Lançamentos do Caixa</h4>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-add">Adicionar
                 lançamento</button>
             <div class="d-flex mt-3 justify-content-between">
@@ -93,11 +94,11 @@ include "show-caixa-action.php";
                 <div class="input-group">
                     <!-- Botão Limpar Filtro de Data -->
                     <span title="Limpar Busca" class="input-group-text" id="btn-filter-date-reset">
-                        <i class="fa-solid fa-rotate-left"></i>
+                        <?= $rotate_icon ?>
                     </span>
                     <!-- Botão Filtrar Data -->
                     <span title="Buscar" class="input-group-text" id="btn-filter-date">
-                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <?= $glass_icon ?>
                     </span>
                     <!-- Data Inicio (default: primeiro dia do mês atual) -->
                     <input type="date" name="data-ini" id="data-ini" value="<?= $data_ini ?? date('Y-m-01') ?>" class="form-control">
@@ -132,19 +133,19 @@ include "show-caixa-action.php";
                 </tr>
 
                 <!-- Entradas movimentacoes (linhas) -->
-                <?php foreach ($lancamentos as $item): ?>
+                <?php foreach ($lancamentos as $lancamento): ?>
                     <?php
-                    $data = string_to_date($item['data_movimento']);
-                    $entrada = $item['movimento'] == 'entrada' ? $item['valor_movimento'] : '-';
-                    $saida = $item['movimento'] == 'saida' ? $item['valor_movimento'] : '-';
-                    $saldo = $item['saldo'];
+                    $data = string_to_date($lancamento['data_movimento']);
+                    $entrada = $lancamento['movimento'] == 'entrada' ? $lancamento['valor_movimento'] : '-';
+                    $saida = $lancamento['movimento'] == 'saida' ? $lancamento['valor_movimento'] : '-';
+                    $saldo = $lancamento['saldo'];
                     ?>
                     <tr>
                         <td>
                             <?= $data ?>
                         </td>
                         <td>
-                            <?= $item['discriminacao_movimento'] ?>
+                            <?= $lancamento['discriminacao_movimento'] ?>
                         </td>
                         <td class="text-center">
                             <?= $entrada != '-' ? saldo_float_to_str($entrada) : '-' ?>
@@ -155,9 +156,12 @@ include "show-caixa-action.php";
                         <td class="text-center">
                             <?= saldo_float_to_str($saldo) ?>
                         </td>
-                        <td><i class="fa-solid fa-pen-to-square"></i></td>
+                        <td class="text-center">
+                            <i class='fa-solid fa-pen-to-square icon-amplify' data-bs-toggle="modal" data-bs-target="#modal-edit-lancamento" onClick="modal_edit(<?= $lancamento['id'] ?>)"></i>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
+                <?php unset($lancamento); ?>
 
             </table>
         </div>
@@ -211,23 +215,52 @@ include "show-caixa-action.php";
 
 
     <!-- Modal Editar lançamento -->
-    <div class="modal fade" id="modal-edit" tabindex="-1" aria-labelledby="modal-edit-label" aria-hidden="true">
+    <div class="modal fade" id="modal-edit-lancamento" tabindex="-1" aria-labelledby="modal-edit-lancamento-label" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modal-edit-label">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary">Salvar</button>
-                </div>
+                <form action="edit-lancamento.php" method="post" class="needs-validation" novalidate>
+                    <input type="hidden" name="id_caixa" id="edit_id_caixa" value="<?= $id ?>" required>
+                    <input type="hidden" name="id_lancamento" id="edit_id_lancamento" required>
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modal-edit-lancamento-label">Editar lançamento</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="discriminacao_movimento" class="form-label">Discriminação do Movimento</label>
+                            <input type="text" name="discriminacao_movimento" for="discriminacao_movimento"
+                                id="edit_discriminacao_movimento" class="form-control" required>
+                            <div class="invalid-feedback">O campo é obrigatório</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="data_movimento" class="form-label">Data do Lançamento</label>
+                            <input type="date" name="data_movimento" for="data_movimento" id="edit_data_movimento"
+                                class="form-control" value="<?= date('Y-m-d') ?>" required>
+                            <div class="invalid-feedback">O campo é obrigatório</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="valor_movimento" class="form-label">Valor do Lançamento</label>
+                            <input type="text" name="valor_movimento" for="valor_movimento" id="edit_valor_movimento"
+                                class="form-control mask-value" required>
+                            <div class="invalid-feedback">O campo é obrigatório</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="movimento" class="form-label">Tipo do Movimento</label>
+                            <select name="movimento" id="edit_tipo_movimento" class="form-control">
+                                <option value="entrada">Entrada</option>
+                                <option value="saida">Saída</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
 
 </div>
 
