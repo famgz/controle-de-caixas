@@ -2,6 +2,7 @@
 include_once "library.php";
 include_once "header.php";
 include_once "index-action.php";
+include_once "calcular-lancamentos.php";
 ?>
 
 <div class="container border round mt-3 p-3 shadow bg-light">
@@ -41,17 +42,17 @@ include_once "index-action.php";
             <form method="get" class="d-flex w-full justify-content-center" id="form-select-rpp">
                 <input type="hidden" name="p" value="<?= '1'; ?>">
                 <input type="hidden" name="busca" value="<?= $busca ?? ''; ?>">
-                <div class="input-group">
+                <div class="input-group d-flex justify-content-end">
                     <span class="input-group-text">Mostrar</span>
 
-                    <select name="rpp" id="rpp" class="border btn btn-ouline-secondary">
+                    <select name="rpp" id="rpp" class="border btn btn-ouline-secondary px-0">
                         <option <?= $rpp == '10' ? 'selected' : '' ?> value="10">10</option>
                         <option <?= $rpp == '20' ? 'selected' : '' ?> value="20">20</option>
                         <option <?= $rpp == '40' ? 'selected' : '' ?> value="40">40</option>
                         <option <?= $rpp == 'todos' ? 'selected' : '' ?> value="todos">Todos</option>
                     </select>
 
-                    <span class="input-group-text">Resultados por Página</span>
+                    <span class="input-group-text">itens por página</span>
                 </div>
             </form>
         </div>
@@ -78,7 +79,7 @@ include_once "index-action.php";
         <div class="col">
             <!-- Executar variável se existir -->
             <?php
-            if (!empty($_SESSION['msg'])) { //sort of .get() function to avoid undefined key error
+            if (!empty($_SESSION['msg'])) { // sort of .get() function to avoid undefined key error
                 echo $_SESSION['msg'];
                 unset($_SESSION['msg']);
             }
@@ -179,26 +180,29 @@ include_once "index-action.php";
                 </thead>
                 <!-- Linhas -->
                 <tbody>
-                    <?php foreach ($caixas as $item): ?>
+                    <?php foreach ($caixas as $caixa): ?>
+                        <?php
+                            calcular_lancamentos($caixa);  // calucla e adiciona a chave-valor saldo_atual ao array $caixa
+                        ?>
                         <tr>
                             <td>#
-                                <?= $item['id'] ?>
+                                <?= $caixa['id'] ?>
                             </td>
                             <td>
-                                <?= $item['nome'] ?>
+                                <?= $caixa['nome'] ?>
                             </td>
                             <td>R$
-                                <?= number_format($item['saldo_inicial'], 2, ',', '.') ?>
+                                <?= saldo_float_to_str($caixa['saldo_atual']) ?>
                             </td>
                             <!-- Botão detalhes do Caixa -->
                             <td class="text-center">
-                                <a title="Detalhes do Caixa" href="show-caixa.php?id=<?= $item['id'] ?>">
+                                <a title="Detalhes do Caixa" href="show-caixa.php?id=<?= $caixa['id'] ?>">
                                     <?= $warning_c_icon ?>
                                 </a>
                             </td>
                             <!-- Botão excluir Caixa -->
                             <td class="text-center">
-                                <a title="Excluir Caixa" data-bs-toggle="modal" data-bs-target="#delete-caixa" data-id="<?= $item['id'] ?>">
+                                <a title="Excluir Caixa" data-bs-toggle="modal" data-bs-target="#delete-caixa" data-id="<?= $caixa['id'] ?>">
                                     <?= $trash_icon ?>
                                 </a>
                             </td>

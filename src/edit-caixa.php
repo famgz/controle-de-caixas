@@ -4,6 +4,9 @@ session_start();
 
 $dados = filter_input_array(INPUT_POST);
 
+// $location = 'Location: index.php';
+$location = 'Location: show-caixa.php?id=' . $dados["id"];
+
 // Mensagem de erro `nome` vazio
 if(!$dados['nome']) {
     $_SESSION['msg'] = "
@@ -12,7 +15,7 @@ if(!$dados['nome']) {
             Erro! O campo nome deve ser preenchido.
         </p>
     ";
-    header('Location: index.php');
+    header($location);
     exit;
 }
 
@@ -33,7 +36,7 @@ if($sql->rowCount()) {
             Erro! Caixa com nome \"{$dados['nome']}\" já existe.
         </p>
     ";
-    header('Location: index.php');
+    header($location);
     exit;
 }
 
@@ -53,7 +56,7 @@ if(!$sql->execute()) {
             Erro! Caixa não editado.
         </p>
     ";
-    header('Location: index.php');
+    header($location);
     exit;
 }
 
@@ -64,7 +67,7 @@ $_SESSION['msg'] = "
         Caixa \"{$dados['nome']}\" atualizado com sucesso!
     </p>
 ";
-header('Location: index.php');
+header($location);
 exit;
 
 ?>

@@ -24,5 +24,3 @@ function debug($x) {
     var_dump($x);
     echo '<pre>';
 }
-
-?>

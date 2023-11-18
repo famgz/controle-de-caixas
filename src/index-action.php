@@ -4,12 +4,8 @@ session_start();
 
 $rpp = filter_input(INPUT_GET, "rpp", FILTER_DEFAULT); // rpp -> resultados por pagina
 $busca = filter_input(INPUT_GET, "busca", FILTER_SANITIZE_SPECIAL_CHARS);
-$query = "";
 
-if ($busca) {
-    $query = "WHERE nome LIKE :busca";
-}
-
+$query = $busca ? "WHERE nome LIKE :busca" : "";
 $busca_todos = "SELECT id, nome, saldo_inicial FROM caixas $query";
 
 // Medida de segurança para evitar slq injection se receber diretamente $busca em $query

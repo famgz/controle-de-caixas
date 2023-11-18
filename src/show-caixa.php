@@ -1,13 +1,16 @@
 <?php
 include_once "header.php";
-include_once "show-caixa-action.php";
+include "show-caixa-action.php";
 ?>
 
 <div class="container border round mt-3 p-3 shadow bg-light">
     <div class="row">
         <div class="col">
             <div class="row">
-                <h3><i class="fa-solid fa-circle-exclamation"></i>Detalhes do Caixa</h3>
+                <h3>
+                    <i class="fa-solid fa-circle-exclamation me-2"></i>
+                    Detalhes do Caixa
+                </h3>
             </div>
         </div>
         <div class="col d-flex justify-content-end align-items-center">
@@ -66,13 +69,42 @@ include_once "show-caixa-action.php";
     <div class="row mt-3">
         <div class="col">
             <h4><i class="fa-solid fa-pen-clip"></i> Lançamentos do Caixa</h4>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-add">Adicionar lançamento</button>
-            <div class="row mt-3">
-                <?= $msg; ?>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-add">Adicionar
+                lançamento</button>
+            <div class="d-flex mt-3 justify-content-between">
+                <div class="d-flex">
+                    <?= $msg; ?>
+                </div>
+                <p class="font-weight-bold m-0 justify-content-center align-self-center">
+                    <small>Saldo Atual: </small>
+                    <span class="fw-bold">R$
+                        <?= saldo_float_to_str($caixa['saldo_atual']) ?>
+                    </span>
+                </p>
             </div>
-            <div class="d-flex justify-content-end align-items-center">
-                <p class="font-weight-bold"><small>Saldo Atual:</small> R$ 0,00</p>
-            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3 d-flex justify-content-end">
+        <div class="col-4">
+            <form method="get" id="form-filter-date">
+                <input type="hidden" name="id" value="<?= $id ?>">
+                <input type="hidden" name="action" value="show">
+                <div class="input-group">
+                    <!-- Botão Limpar Filtro de Data -->
+                    <span title="Limpar Busca" class="input-group-text" id="btn-filter-date-reset">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </span>
+                    <!-- Botão Filtrar Data -->
+                    <span title="Buscar" class="input-group-text" id="btn-filter-date">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <!-- Data Inicio (default: primeiro dia do mês atual) -->
+                    <input type="date" name="data-ini" id="data-ini" value="<?= $data_ini ?? date('Y-m-01') ?>" class="form-control">
+                    <!-- Data Final (default: ultimo dia do mês atual) -->
+                    <input type="date" name="data-fin" id="data-fin" value="<?= $data_fin ?? date('Y-m-t') ?>" class="form-control">
+                </div>
+            </form>
         </div>
     </div>
 
@@ -89,13 +121,23 @@ include_once "show-caixa-action.php";
                     <th></th>
                 </tr>
 
-                <!-- Entradas (linhas) -->
-                <?php foreach ($lancamentos as $item) : ?>
-                    <?php  
-                        $data = string_to_date($item['data_movimento']);
-                        $entrada = $item['movimento'] == 'entrada' ? $item['valor_movimento'] : '-';
-                        $saida = $item['movimento'] == 'saida' ? $item['valor_movimento'] : '-';
-                        $saldo = $item['saldo'];
+                <!-- Saldo Inicial -->
+                <tr>
+                    <td>-</td>
+                    <td>Saldo Inicial</td>
+                    <td class="text-center">-</td>
+                    <td class="text-center">-</td>
+                    <td class="text-center"><?= $caixa['saldo_inicial'] ?></td>
+                    <td></td>
+                </tr>
+
+                <!-- Entradas movimentacoes (linhas) -->
+                <?php foreach ($lancamentos as $item): ?>
+                    <?php
+                    $data = string_to_date($item['data_movimento']);
+                    $entrada = $item['movimento'] == 'entrada' ? $item['valor_movimento'] : '-';
+                    $saida = $item['movimento'] == 'saida' ? $item['valor_movimento'] : '-';
+                    $saldo = $item['saldo'];
                     ?>
                     <tr>
                         <td>
@@ -111,11 +153,10 @@ include_once "show-caixa-action.php";
                             <?= $saida != '-' ? saldo_float_to_str($saida) : '-' ?>
                         </td>
                         <td class="text-center">
-                            <?= saldo_float_to_str($item['saldo']) ?>
+                            <?= saldo_float_to_str($saldo) ?>
                         </td>
                         <td><i class="fa-solid fa-pen-to-square"></i></td>
                     </tr>
-
                 <?php endforeach; ?>
 
             </table>
@@ -135,17 +176,20 @@ include_once "show-caixa-action.php";
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="discriminacao_movimento" class="form-label">Discriminação do Movimento</label>
-                            <input type="text" name="discriminacao_movimento" for="discriminacao_movimento" id="discriminacao_movimento" class="form-control" required>
+                            <input type="text" name="discriminacao_movimento" for="discriminacao_movimento"
+                                id="discriminacao_movimento" class="form-control" required>
                             <div class="invalid-feedback">O campo é obrigatório</div>
                         </div>
                         <div class="form-group">
                             <label for="data_movimento" class="form-label">Data do Lançamento</label>
-                            <input type="date" name="data_movimento" for="data_movimento" id="data_movimento" class="form-control" value="<?= date('Y-m-d') ?>" required>
+                            <input type="date" name="data_movimento" for="data_movimento" id="data_movimento"
+                                class="form-control" value="<?= date('Y-m-d') ?>" required>
                             <div class="invalid-feedback">O campo é obrigatório</div>
                         </div>
                         <div class="form-group">
                             <label for="valor_movimento" class="form-label">Valor do Lançamento</label>
-                            <input type="text" name="valor_movimento" for="valor_movimento" id="valor_movimento" class="form-control mask-value" required>
+                            <input type="text" name="valor_movimento" for="valor_movimento" id="valor_movimento"
+                                class="form-control mask-value" required>
                             <div class="invalid-feedback">O campo é obrigatório</div>
                         </div>
                         <div class="form-group">
@@ -202,11 +246,11 @@ include_once "show-caixa-action.php";
                     event.preventDefault()
                     event.stopPropagation()
                 }
-
                 form.classList.add('was-validated')
             }, false)
         })
     })()
+
 </script>
 
 <?php include_once "footer.php"; ?>

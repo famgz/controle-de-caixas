@@ -1,5 +1,5 @@
 // Formatar inputs numéricos
-$(function () {
+$(() => {
     $(".mask-value").mask("#.##0,00", { reverse: true });
 });
 
@@ -18,6 +18,25 @@ if (btn_clean) {
         document.querySelector('#input-search').value = '';
         document.querySelector('#form-search').submit();
     });
+}
+
+// Detalhes do Caixa, atribuir eventos aos botoes de filtro data
+const form_filter_date = document.querySelector('#form-filter-date');
+// botao submit
+const btn_filter_date = document.querySelector('#btn-filter-date');
+if (btn_filter_date) {
+    btn_filter_date.addEventListener('click', () => {
+        form_filter_date.submit();
+    })
+}
+// botao reset
+const btn_filter_date_reset = document.querySelector('#btn-filter-date-reset');
+if (btn_filter_date_reset) {
+    btn_filter_date_reset.addEventListener('click', () => {
+        document.querySelector('#data-ini').value = "";
+        document.querySelector('#data-fin').value = "";
+        form_filter_date.submit();
+    })
 }
 
 // Botão resultados por página
@@ -39,7 +58,7 @@ icons_delete.forEach((item) => {
 })
 
 // Aplicar ID do botão Excluir Caixa ao value do input modal input-delete-id antes de enviar para delete-caixa-action.php
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Get all elements with the data-bs-target attribute
     let modalTriggers = document.querySelectorAll('[data-bs-target="#delete-caixa"]');
 

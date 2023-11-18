@@ -1,3 +1,8 @@
+p {
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+}
+
 .busca-result {
     color: #646464;
     border-top: 3px solid #ccc;
@@ -5,6 +10,7 @@
 }
 
 #btn-search,
-#btn-clean {
+#btn-clean,
+.input-group-text {
     cursor: pointer;
 }

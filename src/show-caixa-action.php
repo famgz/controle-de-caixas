@@ -1,6 +1,6 @@
-t
 <?php
 include_once "library.php";
+include_once "calcular-lancamentos.php";
 session_start();
 
 date_default_timezone_set("America/Recife");
@@ -21,9 +21,21 @@ if (!$id) {
     exit;
 }
 
+$data_ini = filter_input(INPUT_GET, "data-ini", FILTER_DEFAULT);
+$data_fin = filter_input(INPUT_GET, "data-fin", FILTER_DEFAULT);
+
+// fallback para o mes atual
+// $data_ini = $data_ini ? $data_ini : date('Y-m-01');
+// $data_fin = $data_fin ? $data_fin : date('Y-m-t');
+
+// fallback para o mes atual
+$data_ini = $data_ini ? $data_ini : "";
+$data_fin = $data_fin ? $data_fin : "";
+
+// Obter dados do caixa atual
 $sql = $db->prepare("
     SELECT id, nome, saldo_inicial 
-    FROM caixas 
+    FROM caixas
     WHERE id = :id;
 ");
 $sql->bindValue(':id', $id);
@@ -42,53 +54,11 @@ if (!$sql->rowCount()) {
 
 $caixa = $sql->fetch(PDO::FETCH_ASSOC); // PDO::FETCH_ASSOC -> avoid duplicated values
 
-
 $msg = '';
 if (!empty($_SESSION['msg'])) {
     $msg = $_SESSION['msg'];
     unset($_SESSION['msg']);
 }
 
-
-// Obter caixas_lancamentos do caixa
-$sql = $db->prepare("
-    SELECT 
-        id,
-        id_caixa,
-        movimento,
-        data_movimento,
-        valor_movimento,
-        discriminacao_movimento
-    FROM caixas_lancamentos 
-    WHERE id_caixa = :id
-    ORDER BY data_movimento ASC;
-");
-$sql->bindValue(':id', $id);
-
-
-if (!$sql->execute()) {
-    $_SESSION['msg'] = "
-        <p class='alert alert-danger'>
-            {$error_icon}
-            Erro ao executar comando SQL!
-        </p>
-    ";
-    header($location);
-    exit;
-}
-
-$lancamentos = $sql->fetchAll();
-
-// debug($lancamentos);
-
-// atualizar saldo ate aquela data e lancamento
-$saldo = $caixa['saldo_inicial'];
-foreach($lancamentos as &$item) {  // `&` antes do $item garante modificar o proprio array ao inves de uma copia
-    $entrada = $item['movimento'] == 'entrada' ? $item['valor_movimento'] : 0;
-    $saida = $item['movimento'] == 'saida' ? $item['valor_movimento'] : 0;
-
-    $saldo += $entrada - $saida;
-    $item['saldo'] = $saldo;
-}
-
-unset($item);
+// Obter lancamentos do caixa atual
+$lancamentos = calcular_lancamentos($caixa, $data_ini, $data_fin);
