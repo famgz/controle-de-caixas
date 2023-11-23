@@ -2,6 +2,10 @@
 
 Projeto para gerenciamento financeiro em PHP desenvolvido em paralelo com @cwrsiqueira
 
+![](https://raw.githubusercontent.com/famgz/controle-de-caixas/main/screenshots/screenshot.png)
+
+---
+
 ### Tecnologias utilizadas:
 - PHP
 - HTML
